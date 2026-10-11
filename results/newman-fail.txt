@@ -1,0 +1,98 @@
+newman
+
+Lab05 API Tests
+
+→ setup - Greate Student
+  PUT http://localhost:3000/students/B242270025 [200 OK, 178B, 36ms]
+
+→ Setup - Create Course
+  PUT http://localhost:3000/courses/CS313 [200 OK, 178B, 4ms]
+
+→ Test - Successful Registration
+  POST http://localhost:3000/registrations [201 Created, 202B, 4ms]
+  1. Status code is 201
+  ✓  Result is OK
+  ✓  Registration ID exists
+
+→ Test - No Student
+  POST http://localhost:3000/registrations [200 OK, 192B, 4ms]
+  ✓  Status code is 200
+  ✓  Result is ERROR_NO_STUDENT
+
+→ Setup - No Course Student
+  PUT http://localhost:3000/students/B242270025 [200 OK, 178B, 4ms]
+
+→ No Course
+  POST http://localhost:3000/registrations [200 OK, 191B, 3ms]
+  ✓  Status code is 200
+  ✓  Result is ERROR_NO_COURSE
+
+→ Setup - Inactive Student
+  PUT http://localhost:3000/students/B242270025 [200 OK, 178B, 4ms]
+
+→ Test - Inactive Student
+  POST http://localhost:3000/registrations [200 OK, 198B, 5ms]
+  ✓  Status code is 200
+  ✓  Result is ERROR_INACTIVE_STUDENT
+
+→ Setup - Missing Prerequisite
+  PUT http://localhost:3000/students/S_missing [200 OK, 178B, 5ms]
+
+→ Setup - Missing Prerequisite Course
+  PUT http://localhost:3000/courses/C_missing [200 OK, 178B, 4ms]
+
+→ Test - Missing Prerequisite
+  POST http://localhost:3000/registrations [200 OK, 215B, 4ms]
+  ✓  Урьдач дутуу: статус 200
+  ✓  Урьдач дутуу: ERROR_PREREQUISITES
+
+→ Setup - Combined Error
+  PUT http://localhost:3000/students/B242270025 [200 OK, 178B, 3ms]
+
+→ Test - Combined Error
+  POST http://localhost:3000/registrations [200 OK, 198B, 5ms]
+  ✓  Status code is 200
+  ✓  Inactive student error takes priority
+
+→ Test - Bad Request
+  POST http://localhost:3000/registrations [400 Bad Request, 202B, 3ms]
+  ✓  Status code is 400
+  ✓  Result is ERROR_BAD_REQUEST
+
+→ Setup - No Prerequisites Student
+  PUT http://localhost:3000/students/S_noprereq [200 OK, 178B, 3ms]
+
+→ Setup - No Prerequisites Course
+  PUT http://localhost:3000/courses/C_noprereq [200 OK, 178B, 3ms]
+
+→ Test - No Prerequisites
+  POST http://localhost:3000/registrations [201 Created, 202B, 4ms]
+  ✓  Урьдачгүй хичээл: статус 201
+  ✓  Урьдачгүй хичээл: result=OK
+
+┌─────────────────────────┬─────────────────┬─────────────────┐
+│                         │        executed │          failed │
+├─────────────────────────┼─────────────────┼─────────────────┤
+│              iterations │               1 │               0 │
+├─────────────────────────┼─────────────────┼─────────────────┤
+│                requests │              17 │               0 │
+├─────────────────────────┼─────────────────┼─────────────────┤
+│            test-scripts │               8 │               0 │
+├─────────────────────────┼─────────────────┼─────────────────┤
+│      prerequest-scripts │               0 │               0 │
+├─────────────────────────┼─────────────────┼─────────────────┤
+│              assertions │              17 │               1 │
+├─────────────────────────┴─────────────────┴─────────────────┤
+│ total run duration: 385ms                                   │
+├─────────────────────────────────────────────────────────────┤
+│ total data received: 412B (approx)                          │
+├─────────────────────────────────────────────────────────────┤
+│ average response time: 5ms [min: 3ms, max: 36ms, s.d.: 7ms] │
+└─────────────────────────────────────────────────────────────┘
+
+[31m  # [39m[31m failure        [39m[31m detail                                                [39m
+[90m    [39m[90m                [39m[90m                                                       [39m
+ 1.  AssertionError  Status code is 201                                    
+                     expected response to have status code 200 but got 201 
+                     at assertion:0 in test-script                         
+                     inside "Test - Successful Registration"               
