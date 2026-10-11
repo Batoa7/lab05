@@ -293,6 +293,33 @@
       "response": []
     },
     {
+      "name": "Setup - Missing Prerequisite Course",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"prerequisites\":[\"CS201\"]}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/courses/C_missing",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "courses",
+            "C_missing"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
       "name": "Test - Missing Prerequisite",
       "event": [
         {
@@ -394,40 +421,24 @@
       "response": []
     },
     {
-      "name": "Setup - No Prerequisites Course",
-      "request": {
-        "method": "PUT",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\"prerequisites\":[]}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
+      "name": "Test - Bad Request",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "\npm.test(\"Status code is 400\", function () {\n    pm.response.to.have.status(400);\n});\n\npm.test(\"Result is ERROR_BAD_REQUEST\", function () {\n    const jsonData = pm.response.json();\n    pm.expect(jsonData.result).to.eql(\"ERROR_BAD_REQUEST\");\n});\n"
+            ]
           }
-        },
-        "url": {
-          "raw": "{{baseUrl}}/courses/C_noprereq",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "courses",
-            "C_noprereq"
-          ]
         }
-      },
-      "response": []
-    },
-    {
-      "name": "Setup - Missing Prerequisite Course",
+      ],
       "request": {
-        "method": "PUT",
+        "method": "POST",
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\"prerequisites\":[\"CS201\"]}",
+          "raw": "\n{\n  \"courseID\": \"CS313\"\n}\n",
           "options": {
             "raw": {
               "language": "json"
@@ -435,13 +446,12 @@
           }
         },
         "url": {
-          "raw": "{{baseUrl}}/courses/C_missing",
+          "raw": "{{baseUrl}}/registrations",
           "host": [
             "{{baseUrl}}"
           ],
           "path": [
-            "courses",
-            "C_missing"
+            "registrations"
           ]
         }
       },
@@ -475,24 +485,13 @@
       "response": []
     },
     {
-      "name": "Test - Bad Request",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "type": "text/javascript",
-            "exec": [
-              "\npm.test(\"Status code is 400\", function () {\n    pm.response.to.have.status(400);\n});\n\npm.test(\"Result is ERROR_BAD_REQUEST\", function () {\n    const jsonData = pm.response.json();\n    pm.expect(jsonData.result).to.eql(\"ERROR_BAD_REQUEST\");\n});\n"
-            ]
-          }
-        }
-      ],
+      "name": "Setup - No Prerequisites Course",
       "request": {
-        "method": "POST",
+        "method": "PUT",
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "\n{\n  \"courseID\": \"CS313\"\n}\n",
+          "raw": "{\"prerequisites\":[]}",
           "options": {
             "raw": {
               "language": "json"
@@ -500,12 +499,13 @@
           }
         },
         "url": {
-          "raw": "{{baseUrl}}/registrations",
+          "raw": "{{baseUrl}}/courses/C_noprereq",
           "host": [
             "{{baseUrl}}"
           ],
           "path": [
-            "registrations"
+            "courses",
+            "C_noprereq"
           ]
         }
       },
@@ -552,7 +552,7 @@
   "variable": [
     {
       "key": "baseUrl",
-      "value": ""
+      "value": "http://localhost:3000"
     }
   ]
 }
